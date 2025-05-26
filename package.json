@@ -1,0 +1,21 @@
+{
+    "name": "ex01",
+    "version": "1.0.0",
+    "description": "Express сервер с использованием мидлваров",
+    "main": "app.mjs",
+    "type": "module",
+    "scripts": {
+      "start": "node app.mjs",
+      "dev": "nodemon app.mjs",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "express": "^5.1.0"
+    },
+    "devDependencies": {
+      "nodemon": "^3.0.0"
+    }
+  }
