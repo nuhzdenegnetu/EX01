@@ -1,5 +1,5 @@
 import express from 'express';
-import { requestLogger } from './src/middlewares/loggingMiddleware.mjs';
+import { requestLogger } from './src/middlewares/logging.middleware.mjs';
 import { errorHandler } from './src/middlewares/error.middleware.mjs';
 import indexRouter from './src/routes/index.mjs';
 import usersRouter from './src/routes/users.route.mjs';
