@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title || 'Express App' %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="main-header">
+    <h1>Express с шаблонизаторами</h1>
+    <nav class="main-nav">
+      <a href="/">Главная</a>
+      <a href="/users">Пользователи</a>
+      <a href="/articles">Статьи</a>
+    </nav>
+  </header>
+  <main class="main-content">
+    <%- body %>
+  </main>
+  <footer class="main-footer">
+    <p>© 2025 Express App с шаблонизаторами</p>
+  </footer>
+</body>
+</html>

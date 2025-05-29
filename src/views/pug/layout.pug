@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title= title || 'Express App'
+    link(rel='stylesheet', href='/css/style.css')
+  body
+    header.main-header
+      h1 Express с шаблонизаторами
+      nav.main-nav
+        a(href='/') Главная
+        a(href='/users') Пользователи
+        a(href='/articles') Статьи
+    main.main-content
+      block content
+    footer.main-footer
+      p © 2025 Express App с шаблонизаторами

@@ -1,0 +1,16 @@
+<h2>Список статей</h2>
+<div class="articles-container">
+  <ul class="articles-list">
+    <% articles.forEach(function(article) { %>
+      <li class="article-item">
+        <a href="/articles/<%= article.id %>">
+          <div class="article-card">
+            <h3><%= article.title %></h3>
+            <p>Автор: <%= article.author %></p>
+            <p class="article-summary"><%= article.summary %></p>
+          </div>
+        </a>
+      </li>
+    <% }); %>
+  </ul>
+</div>

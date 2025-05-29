@@ -1,8 +1,8 @@
 import express from 'express';
+import { getHomePage } from '../controllers/index.controller.mjs';
+
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.send('Welcome to the API');
-});
+router.get('/', getHomePage);
 
 export default router;

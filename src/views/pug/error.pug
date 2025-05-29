@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  h2 Ошибка
+  .error-container
+    p= message || 'Что-то пошло не так'
+  a(href='/') Вернуться на главную

@@ -1,20 +1,12 @@
-extends ../layouts/main
+extends ../layout
 
 block content
   h2 Список пользователей
-
-  table.users-table
-    thead
-      tr
-        th ID
-        th Имя
-        th Email
-        th Действия
-    tbody
+  .users-container
+    ul.users-list
       each user in users
-        tr
-          td= user.id
-          td= user.name
-          td= user.email
-          td
-            a(href=`/users/${user.id}`) Подробнее
+        li.user-item
+          a(href=`/users/${user.id}`)
+            .user-card
+              h3= user.name
+              p= user.email

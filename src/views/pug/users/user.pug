@@ -1,14 +1,22 @@
-extends ../layouts/main
+extends ../layout
 
 block content
-  .user-card
-    h2= user.name
-    p
-      strong Email:
-      span= user.email
+  h2= user.name
+  .user-profile
+    .user-details
+      p
+        strong ID:
+        span #{user.id}
+      p
+        strong Email:
+        span #{user.email}
+      p
+        strong Возраст:
+        span #{user.age}
 
-    if user.bio
+    .user-bio
       h3 О пользователе
       p= user.bio
 
-    a.button(href="/users") Назад к списку
+    .user-actions
+      a.button(href='/users') Вернуться к списку пользователей
