@@ -1,0 +1,14 @@
+extends ../layouts/main
+
+block content
+  .user-card
+    h2= user.name
+    p
+      strong Email:
+      span= user.email
+
+    if user.bio
+      h3 О пользователе
+      p= user.bio
+
+    a.button(href="/users") Назад к списку
