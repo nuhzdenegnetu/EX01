@@ -1,0 +1,8 @@
+extends ../layout
+
+block content
+  h2 Вход
+  form(action='/auth/login' method='POST')
+    label(for='username') Имя пользователя:
+    input(type='text' name='username' required)
+    button(type='submit') Войти

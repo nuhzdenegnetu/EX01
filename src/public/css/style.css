@@ -1,176 +1,278 @@
 /* Общие стили */
-  * {
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-  }
+}
 
-  body {
+body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: #333;
     background-color: #f8f9fa;
-  }
+    transition: background-color 0.3s, color 0.3s;
+}
 
-  a {
+a {
     text-decoration: none;
     color: #007bff;
-  }
+}
 
-  a:hover {
+a:hover {
     color: #0056b3;
     text-decoration: underline;
-  }
+}
 
-  .button {
+button, .button {
     display: inline-block;
     padding: 8px 16px;
     margin: 10px 0;
     background-color: #007bff;
     color: white;
+    border: none;
     border-radius: 4px;
     text-decoration: none;
+    cursor: pointer;
     transition: background-color 0.3s;
-  }
+}
 
-  .button:hover {
+button:hover, .button:hover {
     background-color: #0056b3;
-    text-decoration: none;
-    color: white;
-  }
+}
 
-  /* Шапка и навигация */
-  .main-header {
+/* Шапка и навигация */
+.main-header {
     background-color: #343a40;
     padding: 1rem;
     color: white;
-  }
+}
 
-  .main-header h1 {
+.main-header h1 {
     margin-bottom: 1rem;
-  }
+}
 
-  .main-nav {
+.main-nav {
     display: flex;
     gap: 20px;
-  }
+}
 
-  .main-nav a {
+.main-nav a {
     color: white;
     padding: 5px 10px;
     border-radius: 3px;
     transition: background-color 0.3s;
-  }
+}
 
-  .main-nav a:hover {
+.main-nav a:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    text-decoration: none;
-  }
+}
 
-  /* Основное содержимое */
-  .main-content {
+/* Основное содержимое */
+.main-content {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 1rem;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-  }
+}
 
-  h2 {
+h2 {
     margin-bottom: 1.5rem;
     border-bottom: 2px solid #f0f0f0;
     padding-bottom: 0.5rem;
     color: #444;
-  }
+}
 
-  /* Стили для списка пользователей */
-  .users-list, .articles-list {
+/* Стили для .dashboard */
+.dashboard {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.welcome-box {
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+}
+
+.features-list li {
+    margin-bottom: 0.5rem;
+}
+
+.sections-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.section-card {
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.section-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.section-card h3 {
+    margin-bottom: 0.5rem;
+    color: #007bff;
+}
+
+/* Стили для списка пользователей */
+.users-list, .articles-list {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
-  }
+}
 
-  .user-card, .article-card {
+.user-card, .article-card {
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 5px;
     transition: transform 0.2s, box-shadow 0.2s;
-  }
+}
 
-  .user-card:hover, .article-card:hover {
+.user-card:hover, .article-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  .user-card h3, .article-card h3 {
+.user-card h3, .article-card h3 {
     margin-bottom: 0.5rem;
     color: #007bff;
-  }
+}
 
-  /* Стили для профиля пользователя */
-  .user-profile {
+/* Стили для профиля пользователя */
+.user-profile {
     display: grid;
-    grid-template-columns: 1fr;
     gap: 1rem;
-  }
+}
 
-  .user-details, .user-bio {
+.user-details, .user-bio {
     padding: 1rem;
     border: 1px solid #e1e1e1;
     border-radius: 5px;
     background-color: #f9f9f9;
-  }
+}
 
-  .user-details p, .user-bio p {
+.user-details p, .user-bio p {
     margin-bottom: 0.5rem;
-  }
+}
 
-  .user-details strong {
+.user-details strong {
     display: inline-block;
     width: 80px;
-  }
+}
 
-  /* Стили для статей */
-  .article-container {
+/* Стили для статей */
+.article-container {
     padding: 1rem;
-  }
+}
 
-  .article-meta {
+.article-meta {
     margin-bottom: 1rem;
     font-size: 0.9rem;
     color: #6c757d;
-  }
+}
 
-  .article-content {
+.article-content {
     margin-bottom: 1.5rem;
     line-height: 1.8;
-  }
+}
 
-  .article-summary {
+.article-summary {
     color: #6c757d;
     font-style: italic;
-  }
+}
 
-  /* Подвал */
-  .main-footer {
+/* Подвал */
+.main-footer {
     text-align: center;
     padding: 1rem;
     margin-top: 2rem;
     background-color: #343a40;
     color: white;
-  }
-  li {
-    list-style-type: none;
-    list-style-image: none;
-  }
-  /* Стили для сообщений об ошибках */
-  .error-container {
+}
+
+/* Стили для сообщений об ошибках */
+.error-container {
     padding: 1rem;
     background-color: #f8d7da;
     border: 1px solid #f5c6cb;
     border-radius: 5px;
     color: #721c24;
     margin-bottom: 1rem;
-  }
+}
+
+/* Светлая тема */
+body.light-theme {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+body.light-theme .main-content,
+body.light-theme .welcome-box,
+body.light-theme .section-card {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* Темная тема */
+body.dark-theme {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+body.dark-theme .main-content,
+body.dark-theme .welcome-box,
+body.dark-theme .section-card {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border: 1px solid #444;
+}
+body.dark-theme .page-title {
+    color: #ffffff;
+}
+
+body.dark-theme .section-card a {
+    color: #007bff;
+}
+
+body.dark-theme .section-card a:hover {
+    color: #0056b3;
+}
+
+/* Стили для переключателя темы */
+.theme-switcher {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.theme-switcher select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Анимация для переключения темы */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}

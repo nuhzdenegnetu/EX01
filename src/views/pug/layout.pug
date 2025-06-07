@@ -3,13 +3,20 @@ html
   head
     title= title || 'Express App'
     link(rel='stylesheet', href='/css/style.css')
-  body
+    link(rel="icon", href="/favicon.svg")
+  body(class=theme)
     header.main-header
       h1 Express с шаблонизаторами
       nav.main-nav
         a(href='/') Главная
         a(href='/users') Пользователи
         a(href='/articles') Статьи
+      div.theme-switcher
+        label(for="theme-select") Тема:
+        select#theme-select
+          option(value="light") Светлая
+          option(value="dark") Темная
+      script(src="/js/theme.js")
     main.main-content
       block content
     footer.main-footer

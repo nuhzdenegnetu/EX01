@@ -1,13 +1,19 @@
 import express from 'express';
 import path from 'path';
 import ejs from 'ejs';
+// Импортируем либы
+import cookieParser from 'cookie-parser';
 import expressLayouts from 'express-ejs-layouts';
+// Импорт middleware для логирования и обработки ошибок
 import { fileURLToPath } from 'url';
 import { requestLogger } from './src/middlewares/logging.middleware.mjs';
 import { errorHandler } from './src/middlewares/error.middleware.mjs';
+// Импорт маршрутов
 import indexRouter from './src/routes/index.mjs';
 import usersRouter from './src/routes/users.route.mjs';
 import articlesRouter from './src/routes/articles.route.mjs';
+import themeRouter from './src/routes/theme.route.mjs';
+import authRouter from './src/routes/auth.route.mjs';
 
 // Получение абсолютного пути к текущей директории
 const __filename = fileURLToPath(import.meta.url);
@@ -20,8 +26,18 @@ app.use(express.text());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Настройка cookie-parser
+app.use(cookieParser());
+
+app.use((req, res, next) => {
+  res.locals.theme = req.cookies.theme || 'light-theme'; // Устанавливаем тему по умолчанию
+  next();
+});
+
 // Настройка статических файлов
 app.use(express.static(path.join(__dirname, 'src/public')));
+app.use(express.static(path.join(process.cwd(), 'src/public/icon')));
+app.use('/favicon.svg', express.static(path.join(process.cwd(), 'public', 'favicon.svg')));
 
 // Настройка шаблонизаторов
 app.set('views', path.join(__dirname, 'src/views'));
@@ -57,6 +73,8 @@ app.use(requestLogger);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/articles', articlesRouter);
+app.use('/theme', themeRouter);
+app.use('/auth', authRouter);
 
 // Обработка несуществующих маршрутов
 app.use((req, res) => {
@@ -76,3 +94,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+
+// TODO: Надо доделать прбоблему с аутентификацией и авторизацией, не работает отдает просто пустую страницу
