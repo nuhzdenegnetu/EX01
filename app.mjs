@@ -95,5 +95,7 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
+//hello world
+
 
 // TODO: Надо доделать прбоблему с аутентификацией и авторизацией, не работает отдает просто пустую страницу
