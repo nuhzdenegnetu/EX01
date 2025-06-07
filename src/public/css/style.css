@@ -238,7 +238,9 @@ body.dark-theme {
 
 body.dark-theme .main-content,
 body.dark-theme .welcome-box,
-body.dark-theme .section-card {
+body.dark-theme .section-card,
+body.dark-theme .user-details,
+body.dark-theme .user-bio {
     background-color: #1e1e1e;
     color: #ffffff;
     border: 1px solid #444;

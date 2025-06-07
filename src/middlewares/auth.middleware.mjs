@@ -4,7 +4,14 @@ const SECRET_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWl
 
 export const verifyToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
+
+    // Если заголовка нет или формат неверный
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        // Для HTML-запросов перенаправляем на страницу входа
+        if (req.accepts('html')) {
+            return res.redirect('/auth/login');
+        }
+        // Для API запросов возвращаем JSON с ошибкой
         return res.status(403).json({message: 'Неверный формат заголовка Authorization'});
     }
 
@@ -14,6 +21,9 @@ export const verifyToken = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (err) {
+        if (req.accepts('html')) {
+            return res.redirect('/auth/login');
+        }
         res.status(401).json({message: 'Неверный или истекший токен'});
     }
 };
