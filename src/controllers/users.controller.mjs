@@ -1,30 +1,10 @@
-export const getUsers = (req, res) => {
-    // В реальном приложении данные будут получены из БД
-    const users = [
-        {id: 1, name: 'Иван', email: 'ivan@example.com'},
-        {id: 2, name: 'Мария', email: 'maria@example.com'},
-        {id: 3, name: 'Алексей', email: 'alex@example.com'}
-    ];
+import FakeUser from '../models/fakeUser.model.mjs';
 
-    res.render('pug/users/index.pug', {
-        title: 'Список пользователей',
-        users
-    });
-};
-
-export const getUserById = (req, res) => {
-    const userId = parseInt(req.params.userId);
-
-    // В реальном приложении данные будут получены из БД
-    const user = {
-        id: userId,
-        name: `Пользователь ${userId}`,
-        email: `user${userId}@example.com`,
-        bio: 'Описание пользователя'
-    };
-
-    res.render('pug/users/user.pug', {
-        title: `Пользователь ${user.name}`,
-        user
-    });
+export const getUsers = async (req, res) => {
+    try {
+        const users = await FakeUser.find();
+        res.render('pug/users/index', { title: 'Пользователи', users });
+    } catch (err) {
+        res.status(500).render('pug/users/index', { title: 'Пользователи', error: 'Ошибка загрузки пользователей' });
+    }
 };

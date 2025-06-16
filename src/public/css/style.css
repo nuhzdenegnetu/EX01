@@ -19,11 +19,10 @@ a {
 }
 
 a:hover {
-    color: #0056b3;
     text-decoration: underline;
 }
 
-button, .button {
+.btn {
     display: inline-block;
     padding: 8px 16px;
     margin: 10px 0;
@@ -36,39 +35,39 @@ button, .button {
     transition: background-color 0.3s;
 }
 
-button:hover, .button:hover {
+.btn:hover {
     background-color: #0056b3;
 }
 
-/* Шапка и навигация */
-.main-header {
+/* Шапка */
+.page__header {
     background-color: #343a40;
     padding: 1rem;
     color: white;
 }
 
-.main-header h1 {
+.page__title {
     margin-bottom: 1rem;
 }
 
-.main-nav {
+.page__nav {
     display: flex;
     gap: 20px;
 }
 
-.main-nav a {
+.page__nav-link {
     color: white;
     padding: 5px 10px;
     border-radius: 3px;
     transition: background-color 0.3s;
 }
 
-.main-nav a:hover {
+.page__nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Основное содержимое */
-.main-content {
+.page__content {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 1rem;
@@ -77,7 +76,7 @@ button:hover, .button:hover {
     border-radius: 5px;
 }
 
-h2 {
+.page__section-title {
     margin-bottom: 1.5rem;
     border-bottom: 2px solid #f0f0f0;
     padding-bottom: 0.5rem;
@@ -90,29 +89,29 @@ h2 {
     gap: 1.5rem;
 }
 
-.welcome-box {
+.dashboard__welcome {
     padding: 1rem;
     background-color: #f9f9f9;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.features-list {
+.dashboard__features {
     list-style: none;
     padding: 0;
 }
 
-.features-list li {
+.dashboard__feature-item {
     margin-bottom: 0.5rem;
 }
 
-.sections-overview {
+.dashboard__sections {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
 }
 
-.section-card {
+.dashboard__section-card {
     padding: 1rem;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
@@ -120,95 +119,59 @@ h2 {
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.section-card:hover {
+.dashboard__section-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.section-card h3 {
+.section-card__title {
     margin-bottom: 0.5rem;
     color: #007bff;
 }
 
 /* Стили для списка пользователей */
-.users-list, .articles-list {
+.users__list {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
 }
 
-.user-card, .article-card {
+.users__item {
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 5px;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.user-card:hover, .article-card:hover {
+.users__item:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.user-card h3, .article-card h3 {
-    margin-bottom: 0.5rem;
-    color: #007bff;
-}
-
-/* Стили для профиля пользователя */
-.user-profile {
-    display: grid;
+/* Стили для формы */
+.form {
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
 }
 
-.user-details, .user-bio {
-    padding: 1rem;
-    border: 1px solid #e1e1e1;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+.form__label {
+    font-weight: bold;
 }
 
-.user-details p, .user-bio p {
-    margin-bottom: 0.5rem;
+.form__input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-.user-details strong {
-    display: inline-block;
-    width: 80px;
+.form__button {
+    align-self: flex-start;
 }
 
-/* Стили для статей */
-.article-container {
-    padding: 1rem;
-}
-
-.article-meta {
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    color: #6c757d;
-}
-
-.article-content {
-    margin-bottom: 1.5rem;
-    line-height: 1.8;
-}
-
-.article-summary {
-    color: #6c757d;
-    font-style: italic;
-}
-
-/* Подвал */
-.main-footer {
-    text-align: center;
-    padding: 1rem;
-    margin-top: 2rem;
-    background-color: #343a40;
-    color: white;
-}
-
-/* Стили для сообщений об ошибках */
-.error-container {
+/* Стили для ошибок */
+.error__container {
     padding: 1rem;
     background-color: #f8d7da;
     border: 1px solid #f5c6cb;
@@ -217,64 +180,211 @@ h2 {
     margin-bottom: 1rem;
 }
 
+.error__message {
+    margin: 0;
+}
+
+/* Подвал */
+.page__footer {
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+    background-color: #343a40;
+    color: white;
+}
+/* Стили для переключателя темы */
+.theme-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.theme-switcher__toggle {
+    width: 40px;
+    height: 20px;
+    appearance: none;
+    background-color: #ddd;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease;
+}
+
+.theme-switcher__toggle:checked {
+    background-color: #007bff;
+}
+
+.theme-switcher__toggle::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s ease;
+}
+
+.theme-switcher__toggle:checked::before {
+    transform: translateX(20px);
+}
+
+.theme-switcher__label {
+    font-size: 0.9rem;
+    color: white;
+}
+/* EJS */
+/* Стили для статьи */
+.article {
+    margin-bottom: 2rem;
+}
+
+.article__title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.article__meta {
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.article__author,
+.article__date {
+    margin-bottom: 0.5rem;
+}
+
+.article__content {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.article__actions {
+    text-align: right;
+}
+
+.article__back-link {
+    margin-top: 1rem;
+}
+
+/* Стили для списка статей */
+.articles {
+    margin-top: 2rem;
+}
+
+.articles__title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #444;
+}
+
+.articles__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.articles__item {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.articles__item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.articles__link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.articles__card {
+    padding: 1rem;
+    background-color: #f9f9f9;
+}
+
+.articles__card-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #007bff;
+}
+
+.articles__card-author,
+.articles__card-summary {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Стили для ошибок */
+.error {
+    padding: 1rem;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    color: #721c24;
+    margin-bottom: 1rem;
+}
+
+.error__title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #721c24;
+}
+
+.error__message {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.error__back-link {
+    display: inline-block;
+    margin-top: 1rem;
+}
+/* Темы */
+/* Плавный переход для темы */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 /* Светлая тема */
-body.light-theme {
+.page--light {
     background-color: #ffffff;
     color: #000000;
 }
 
-body.light-theme .main-content,
-body.light-theme .welcome-box,
-body.light-theme .section-card {
+.page--light .page__content,
+.page--light .dashboard__welcome,
+.page--light .dashboard__section-card {
     background-color: #ffffff;
     color: #000000;
+    border: 1px solid #ddd;
 }
 
-/* Темная тема */
-body.dark-theme {
+/* Тёмная тема */
+.page--dark {
     background-color: #121212;
     color: #ffffff;
 }
 
-body.dark-theme .main-content,
-body.dark-theme .welcome-box,
-body.dark-theme .section-card,
-body.dark-theme .user-details,
-body.dark-theme .user-bio {
+.page--dark .page__content,
+.page--dark .dashboard__welcome,
+.page--dark .dashboard__section-card,
+.page--dark .page__section-title,
+.page--dark .articles__title,
+.page--dark .articles__card,
+.page--dark .articles__card-author,
+.page--dark .articles__card-summary,
+.page--dark .article__author,
+.page--dark .article__date{
     background-color: #1e1e1e;
     color: #ffffff;
-    border: 1px solid #444;
-}
-body.dark-theme .page-title {
-    color: #ffffff;
-}
-
-body.dark-theme .section-card a {
-    color: #007bff;
-}
-
-body.dark-theme .section-card a:hover {
-    color: #0056b3;
-}
-
-/* Стили для переключателя темы */
-.theme-switcher {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.theme-switcher select {
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-/* Анимация для переключения темы */
-body {
-    transition: background-color 0.3s ease, color 0.3s ease;
 }

@@ -1,23 +1,26 @@
 doctype html
 html
-  head
-    title= title || 'Express App'
-    link(rel='stylesheet', href='/css/style.css')
-    link(rel="icon", href="/favicon.svg")
-  body(class=theme)
-    header.main-header
-      h1 Express с шаблонизаторами
-      nav.main-nav
-        a(href='/') Главная
-        a(href='/users') Пользователи
-        a(href='/articles') Статьи
-      div.theme-switcher
-        label(for="theme-select") Тема:
-        select#theme-select
-          option(value="light") Светлая
-          option(value="dark") Темная
-      script(src="/js/theme.js")
-    main.main-content
-      block content
-    footer.main-footer
-      p © 2025 Express App с шаблонизаторами
+    head
+        title= title || 'Express App'
+        link(rel='stylesheet', href='/css/style.css')
+        link(rel="icon", href="/favicon.svg")
+    body(class="page page--" + theme)
+        header.page__header
+            h1.page__title Express с шаблонизаторами
+            nav.page__nav
+                a.page__nav-link(href='/') Главная
+                a.page__nav-link(href='/users') Пользователи
+                a.page__nav-link(href='/articles') Статьи
+                if !isAuthenticated
+                    a.page__nav-link(href='/auth/login') Вход
+                    a.page__nav-link(href='/auth/register') Регистрация
+                else
+                    a.page__nav-link(href='/auth/logout') Выход
+                div.theme-switcher
+                    input#theme-toggle.theme-switcher__toggle(type="checkbox")
+                    label.theme-switcher__label(for="theme-toggle") Тема
+            script(src="/js/theme.js")
+        main.page__content
+            block content
+        footer.page__footer
+            p.page__footer-text © 2025 Express App с шаблонизаторами

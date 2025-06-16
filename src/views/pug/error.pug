@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h2 Ошибка
-  .error-container
-    p= message || 'Что-то пошло не так'
-  a(href='/') Вернуться на главную
+    h2.page__section-title Ошибка
+    div.error__container
+        p.error__message= message || 'Что-то пошло не так'
+    a.error__link.btn.btn--primary(href='/') Вернуться на главную

@@ -1,13 +1,13 @@
-<h2><%= article.title %></h2>
-<div class="article-container">
-  <div class="article-meta">
-    <p><strong>Автор:</strong> <%= article.author %></p>
-    <p><strong>Опубликовано:</strong> <%= article.publishedDate %></p>
-  </div>
-  <div class="article-content">
-    <p><%= article.content %></p>
-  </div>
-  <div class="article-actions">
-    <a class="button" href="/articles">Вернуться к списку статей</a>
-  </div>
+<h1 class="article__title"><%= article.title %></h1>
+<div class="article">
+    <div class="article__meta">
+        <p class="article__author"><strong>Автор:</strong> <%= article.author %></p>
+        <p class="article__date"><strong>Опубликовано:</strong> <%= article.publishedDate %></p>
+    </div>
+    <div class="article__content">
+        <p><%= article.content %></p>
+    </div>
+    <div class="article__actions">
+        <a class="btn btn--primary article__back-link" href="/articles">Вернуться к списку статей</a>
+    </div>
 </div>

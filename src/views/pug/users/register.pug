@@ -1,8 +1,20 @@
 extends ../layout
 
 block content
-  h2 Регистрация
-  form(action='/auth/register' method='POST')
-    label(for='username') Имя пользователя:
-    input(type='text' name='username' required)
-    button(type='submit') Зарегистрироваться
+    h1.page__section-title Регистрация
+    form.register__form(action="/auth/register" method="POST")
+        label.register__label(for="name") Имя:
+        input.register__input(type="text" name="name" placeholder="Имя" required)
+        br
+        label.register__label(for="email") Email:
+        input.register__input(type="text" name="email" placeholder="Email" required)
+        br
+        label.register__label(for="password") Пароль:
+        input.register__input(type="password" name="password" placeholder="Пароль" required)
+        br
+        button.register__button.btn.btn--primary(type="submit") Зарегистрироваться
+    p.register__text Уже зарегистрированы?
+    a.register__link(href="/auth/login") Войти
+
+    // Подключение fetch.js
+    script(src="/js/fetch.js")

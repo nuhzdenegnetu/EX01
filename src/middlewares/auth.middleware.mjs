@@ -1,29 +1,43 @@
+// `src/middlewares/auth.middleware.mjs`
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET;
 
-const SECRET_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjkzNzY4MDAwLCJleHAiOjE2OTM3NzE2MDB9.4f5c8b1a2d3e4f5g6h7i8j9k0lmnopqrstuvwx'; // Используйте безопасный ключ
+if (!JWT_SECRET) {
+    console.error('JWT_SECRET не определён. Проверьте файл .env');
+    process.exit(1); // Завершение приложения, если секрет отсутствует
+}
 
-export const verifyToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
+export const isAuthenticated = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).render('pug/auth/unauthorized', { title: 'Доступ запрещён' });
+  }
 
-    // Если заголовка нет или формат неверный
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        // Для HTML-запросов перенаправляем на страницу входа
-        if (req.accepts('html')) {
-            return res.redirect('/auth/login');
-        }
-        // Для API запросов возвращаем JSON с ошибкой
-        return res.status(403).json({message: 'Неверный формат заголовка Authorization'});
-    }
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    res.status(401).render('pug/auth/unauthorized', { title: 'Доступ запрещён' });
+  }
+};
 
-    const token = authHeader.split(' ')[1];
+export const checkAuth = (req, res, next) => {
+  const token = req.cookies.token;
+
+  if (token) {
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        req.user = decoded;
-        next();
+      const decoded = jwt.verify(token, JWT_SECRET);
+      req.user = decoded;
+      res.locals.isAuthenticated = true;
     } catch (err) {
-        if (req.accepts('html')) {
-            return res.redirect('/auth/login');
-        }
-        res.status(401).json({message: 'Неверный или истекший токен'});
+      res.locals.isAuthenticated = false;
     }
+  } else {
+    res.locals.isAuthenticated = false;
+  }
+
+  next();
 };

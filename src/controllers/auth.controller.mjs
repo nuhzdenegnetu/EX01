@@ -1,36 +1,64 @@
-import jwt from 'jsonwebtoken';
+import AuthUser from '../models/authUser.model.mjs';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-const users = []; // В реальном приложении использую базу данных
 
-const SECRET_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjkzNzY4MDAwLCJleHAiOjE2OTM3NzE2MDB9.4f5c8b1a2d3e4f5g6h7i8j9k0lmnopqrstuvwx';
+dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET;// Замените на ваш секретный ключ
+
+export const renderLoginPage = (req, res) => {
+    res.render('pug/users/login', {title: 'Вход', isAuthenticated: !!req.cookies.token});
+};
+
+export const renderRegisterPage = (req, res) => {
+    res.render('pug/users/register', {title: 'Регистрация', isAuthenticated: !!req.cookies.token});
+};
 
 export const register = async (req, res) => {
-    const { username, password } = req.body;
+  const { name, password } = req.body;
 
-    if (!username || !password) {
-        return res.status(400).json({ message: 'Имя пользователя и пароль обязательны' });
+  try {
+    const existingUser = await AuthUser.findOne({ name });
+    if (existingUser) {
+      return res.status(400).render('pug/users/register', { title: 'Регистрация', error: 'Имя уже используется' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    users.push({ username, password: hashedPassword });
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const newUser = new AuthUser({ name, password: hashedPassword });
+    await newUser.save();
 
-    res.status(201).json({ message: 'Пользователь зарегистрирован' });
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.cookie('token', token, { httpOnly: true });
+    res.redirect('/'); // Перенаправление на главную страницу
+  } catch (err) {
+    res.status(500).render('pug/users/register', { title: 'Регистрация', error: 'Ошибка сервера' });
+  }
 };
 
 export const login = async (req, res) => {
-    const { username, password } = req.body;
+  const { name, password } = req.body;
 
-    const user = users.find(u => u.username === username);
+  try {
+    const user = await AuthUser.findOne({ name });
     if (!user) {
-        return res.status(401).json({ message: 'Неверные учетные данные' });
+      return res.status(400).render('pug/users/login', { title: 'Вход', error: 'Неверное имя или пароль' });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Неверные учетные данные' });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).render('pug/users/login', { title: 'Вход', error: 'Неверное имя или пароль' });
     }
 
-    const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
-    res.json({ message: 'Вход выполнен', token });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.cookie('token', token, { httpOnly: true });
+    res.redirect('/'); // Перенаправление на главную страницу
+  } catch (err) {
+    res.status(500).render('pug/users/login', { title: 'Вход', error: 'Ошибка сервера' });
+  }
+};
+
+export const logout = (req, res) => {
+    res.clearCookie('token');
+    res.redirect('/');
 };

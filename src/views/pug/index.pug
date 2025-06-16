@@ -1,22 +1,22 @@
 extends layout
 
 block content
-  h2.page-title Добро пожаловать в Express приложение
+    h2.page__section-title Добро пожаловать в Express приложение
 
-  .dashboard
-    .welcome-box
-      p Это демонстрационное приложение использует различные шаблонизаторы:
-      ul.features-list
-        li Pug - для главной страницы и раздела пользователей
-        li EJS - для раздела статей
+    section.dashboard
+        div.dashboard__welcome
+            p.dashboard__text Это демонстрационное приложение использует различные шаблонизаторы:
+            ul.dashboard__features
+                li.dashboard__feature-item Pug - для главной страницы и раздела пользователей
+                li.dashboard__feature-item EJS - для раздела статей
 
-    .sections-overview
-      .section-card
-        h3 Пользователи
-        p Просмотр и управление пользователями системы
-        a.btn.btn-primary(href='/users') Перейти к пользователям
+        div.dashboard__sections
+            article.dashboard__section-card
+                h3.section-card__title Пользователи
+                p.section-card__description Просмотр и управление пользователями системы
+                a.section-card__link.btn.btn--primary(href='/users') Перейти к пользователям
 
-      .section-card
-        h3 Статьи
-        p Просмотр и управление статьями на сайте
-        a.btn.btn-primary(href='/articles') Перейти к статьям
+            article.dashboard__section-card
+                h3.section-card__title Статьи
+                p.section-card__description Просмотр и управление статьями на сайте
+                a.section-card__link.btn.btn--primary(href='/articles') Перейти к статьям

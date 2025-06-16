@@ -1,8 +1,17 @@
 extends ../layout
 
 block content
-  h2 Вход
-  form(action='/auth/login' method='POST')
-    label(for='username') Имя пользователя:
-    input(type='text' name='username' required)
-    button(type='submit') Войти
+    h1.page__section-title Вход
+    form.login__form(action="/auth/login" method="POST")
+        label.login__label(for="email") Email:
+        input.login__input(type="email" name="email" placeholder="Email" required)
+        br
+        label.login__label(for="password") Пароль:
+        input.login__input(type="password" name="password" placeholder="Пароль" required)
+        br
+        button.login__button.btn.btn--primary(type="submit") Войти
+    p.login__text Нет аккаунта?
+    a.login__link(href="/auth/register") Зарегистрироваться
+
+    // Подключение fetch.js
+    script(src="/js/fetch.js")

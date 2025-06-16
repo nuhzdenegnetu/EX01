@@ -1,12 +1,11 @@
 extends ../layout
 
 block content
-  h2 Список пользователей
-  .users-container
-    ul.users-list
-      each user in users
-        li.user-item
-          a(href=`/users/${user.id}`)
-            .user-card
-              h3= user.name
-              p= user.email
+    h1.page__section-title Список пользователей
+    a.page__link.btn.btn--secondary(href="/auth/logout") Выйти
+    if error
+        p.error__message(style="color: red")= error
+    else
+        ul.users__list
+            each user in users
+                li.users__item= user.name + " (" + user.email + ")"

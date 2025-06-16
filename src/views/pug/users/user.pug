@@ -1,22 +1,7 @@
 extends ../layout
 
 block content
-  h2= user.name
-  .user-profile
-    .user-details
-      p
-        strong ID:
-        span #{user.id}
-      p
-        strong Email:
-        span #{user.email}
-      p
-        strong Возраст:
-        span #{user.age}
-
-    .user-bio
-      h3 О пользователе
-      p= user.bio
-
-    .user-actions
-      a.button(href='/users') Вернуться к списку пользователей
+    h1.page__section-title Пользователи
+    ul.users__list
+        each user in users
+            li.users__item #{user.name} - #{user.email}
