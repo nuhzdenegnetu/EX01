@@ -24,7 +24,8 @@ router.post('/register', async (req, res) => {
     }
 
     console.log('Создание нового пользователя');
-    const user = new AuthUser({ name, email, password });
+    const hashedPassword = await bcrypt.hash(password, 12); // Изменено: добавлено хэширование пароля
+    const user = new AuthUser({ name, email, password: hashedPassword }); // Изменено: сохранение хэшированного пароля
     await user.save();
 
     console.log('Пользователь успешно сохранен:', user);
@@ -35,18 +36,8 @@ router.post('/register', async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-    user.token = token;
-
-    try {
-      await user.save();
-      console.log('Токен успешно сохранён в базе данных:', user.token);
-    } catch (err) {
-      console.error('Ошибка при сохранении токена в базе данных:', err);
-      return res.status(500).json({ error: 'Ошибка сервера при сохранении токена' });
-    }
-
-    res.cookie('token', token, { httpOnly: true, secure: true });
-    res.status(201).json({ message: 'Пользователь зарегистрирован', redirectUrl: '/' });
+    res.cookie('token', token, { httpOnly: true }); // Изменено: убрано secure: true для локальной разработки
+    res.redirect('/');
   } catch (err) {
     if (err.code === 11000) {
       console.error('Ошибка дублирования:', err.keyValue);
@@ -104,8 +95,6 @@ router.get('/register', (req, res) => {
 
 router.get('/register', renderRegisterPage);
 router.get('/login', renderLoginPage);
-router.post('/register', register);
-router.post('/login', login);
 router.get('/logout', logout);
 
 export default router;

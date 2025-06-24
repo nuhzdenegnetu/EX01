@@ -2,10 +2,10 @@ extends ../layout
 
 block content
     h1.page__section-title Список пользователей
-    a.page__link.btn.btn--secondary(href="/auth/logout") Выйти
-    if error
-        p.error__message(style="color: red")= error
-    else
+    if users && users.length
         ul.users__list
             each user in users
-                li.users__item= user.name + " (" + user.email + ")"
+                li.users__item
+                    a(href=`/users/${user.userId}`) #{user.name} - #{user.email}
+    else
+        p.error Пользователи не найдены

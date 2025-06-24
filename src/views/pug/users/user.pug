@@ -1,7 +1,10 @@
 extends ../layout
 
 block content
-    h1.page__section-title Пользователи
-    ul.users__list
-        each user in users
-            li.users__item #{user.name} - #{user.email}
+    h1.page__section-title Профиль пользователя
+    if user
+        div.user__profile
+            p.user__name Имя: #{user.name}
+            p.user__email Email: #{user.email}
+    else
+        p.error Пользователь не найден

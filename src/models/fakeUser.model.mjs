@@ -5,6 +5,7 @@ const fakeUserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
+  userId: { type: Number, required: true, unique: true },
 });
 
 export default mongoose.model('FakeUser', fakeUserSchema);
