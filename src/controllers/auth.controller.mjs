@@ -29,7 +29,7 @@ export const register = async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.cookie('token', token, { httpOnly: true });
+    res.cookie('token', token, { httpOnly: true, secure: true });
     res.redirect('/'); // Перенаправление на главную страницу
   } catch (err) {
     res.status(500).render('pug/users/register', { title: 'Регистрация', error: 'Ошибка сервера' });

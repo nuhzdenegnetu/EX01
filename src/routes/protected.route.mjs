@@ -1,11 +1,12 @@
-// `src/routes/protected.routes.mjs`
+// `src/routes/protected.route.mjs`
 import express from 'express';
 import {isAuthenticated} from '../middlewares/auth.middleware.mjs';
 import FakeUser from '../models/fakeUser.model.mjs';
 
 const router = express.Router();
 
-router.get('/protected', isAuthenticated, async (req, res) => {
+// Используем '/' вместо '/protected'
+router.get('/', isAuthenticated, async (req, res) => {
     try {
         const fakeUsers = await FakeUser.find();
         res.status(200).json({message: 'Доступ разрешен', fakeUsers});

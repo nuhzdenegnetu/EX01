@@ -1,5 +1,6 @@
 // `src/middlewares/auth.middleware.mjs`
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose'; // Добавляем импорт
 import dotenv from 'dotenv';
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -24,19 +25,34 @@ export const isAuthenticated = (req, res, next) => {
   }
 };
 
-export const checkAuth = (req, res, next) => {
+// src/middlewares/auth.middleware.mjs
+export const checkAuth = async (req, res, next) => {
   const token = req.cookies.token;
+  res.locals.isAuthenticated = false; // По умолчанию не авторизован
 
   if (token) {
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
-      req.user = decoded;
-      res.locals.isAuthenticated = true;
+
+      // Проверяем существование пользователя
+      const AuthUser = mongoose.model('AuthUser');
+      const user = await AuthUser.findOne({
+        _id: decoded.id,
+        token: token
+      });
+
+      if (user) {
+        req.user = user;
+        res.locals.user = {
+          id: user._id,
+          name: user.name,
+          email: user.email
+        };
+        res.locals.isAuthenticated = true; // Устанавливаем флаг авторизации
+      }
     } catch (err) {
-      res.locals.isAuthenticated = false;
+      console.log('Ошибка проверки токена:', err.message);
     }
-  } else {
-    res.locals.isAuthenticated = false;
   }
 
   next();

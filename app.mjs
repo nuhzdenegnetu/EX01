@@ -16,8 +16,10 @@ import articlesRouter from './src/routes/articles.route.mjs';
 import themeRouter from './src/routes/theme.route.mjs';
 import authRouter from './src/routes/auth.route.mjs';
 import protectedRoute from './src/routes/protected.route.mjs';
+import crudRoutes from './src/routes/crud.route.mjs';
 // Импортируем функцию для подключения к базе данных
 import connectDB from './src/config/db.mjs';
+import './src/models/authUser.model.mjs';
 // Загрузка переменных окружения
 import dotenv from 'dotenv';
 import {checkAuth} from "./src/middlewares/auth.middleware.mjs";
@@ -41,7 +43,7 @@ app.use(express.text());
 
 // Настройка cookie-parser
 app.use(cookieParser());
-app.use(checkAuth)
+app.use(checkAuth);
 
 // Установка темы по умолчанию
 app.use((req, res, next) => {
@@ -84,7 +86,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { httpOnly: true, secure: true, maxAge: 3600000 },
+    cookie: { httpOnly: true, secure: false, maxAge: 3600000 },
   })
 );
 // Настройка Passport
@@ -98,6 +100,7 @@ app.use('/articles', articlesRouter);
 app.use('/theme', themeRouter);
 app.use('/auth', authRouter);
 app.use('/protected', protectedRoute);
+app.use('/api/crud', crudRoutes);
 
 // Обработка несуществующих маршрутов
 app.use((req, res) => {
@@ -118,3 +121,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+

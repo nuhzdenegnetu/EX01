@@ -2,18 +2,23 @@ extends ../layout
 
 block content
     h1.page__section-title Регистрация
+    if errors
+        .error-messages
+            each error, field in errors
+                p.error= error
+
     form.register__form(action="/auth/register" method="POST")
         label.register__label(for="name") Имя:
-        input.register__input(type="text" name="name" placeholder="Имя" required)
+        input.register__input(type="text" name="name" placeholder="Имя" required value=(values && values.name ? values.name : ''))
         br
         label.register__label(for="email") Email:
-        input.register__input(type="text" name="email" placeholder="Email" required)
+        input.register__input(type="email" name="email" placeholder="Email" required value=(values && values.email ? values.email : ''))
         br
         label.register__label(for="password") Пароль:
-        input.register__input(type="password" name="password" placeholder="Пароль" required)
+        input.register__input(type="password" name="password" placeholder="Пароль (минимум 6 символов)" required)
         br
         button.register__button.btn.btn--primary(type="submit") Зарегистрироваться
-    p.register__text Уже зарегистрированы?
+    p.register__text Уже есть аккаунт?
     a.register__link(href="/auth/login") Войти
 
     // Подключение fetch.js

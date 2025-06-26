@@ -2,9 +2,14 @@ extends ../layout
 
 block content
     h1.page__section-title Вход
+    if errors
+        .error-messages
+            each error, field in errors
+                p.error= error
+
     form.login__form(action="/auth/login" method="POST")
         label.login__label(for="email") Email:
-        input.login__input(type="email" name="email" placeholder="Email" required)
+        input.login__input(type="email" name="email" placeholder="Email" required value=(values && values.email ? values.email : ''))
         br
         label.login__label(for="password") Пароль:
         input.login__input(type="password" name="password" placeholder="Пароль" required)

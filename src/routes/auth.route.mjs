@@ -1,10 +1,10 @@
-// `src/routes/auth.routes.mjs`
+// `src/routes/auth.route.mjs`
 import dotenv from 'dotenv';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import AuthUser from '../models/authUser.model.mjs';
 import bcrypt from 'bcrypt';
-import { register, login, logout, renderLoginPage, renderRegisterPage } from '../controllers/auth.controller.mjs';
+import { logout, renderLoginPage, renderRegisterPage } from '../controllers/auth.controller.mjs';
 
 const router = express.Router();
 
@@ -17,34 +17,89 @@ router.post('/register', async (req, res) => {
   try {
     console.log('Получен запрос на регистрацию:', req.body);
 
+    // Базовая валидация
+    const errors = {};
+
+    if (!name || name.trim().length < 2) {
+      errors.name = 'Имя должно содержать минимум 2 символа';
+    }
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = 'Введите корректный email адрес';
+    }
+
+    if (!password || password.length < 6) {
+      errors.password = 'Пароль должен содержать минимум 6 символов';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+        return res.status(400).json({ errors });
+      } else {
+        return res.status(400).render('pug/users/register', {
+          title: 'Регистрация',
+          errors,
+          values: { name, email }
+        });
+      }
+    }
+
     const existingUser = await AuthUser.findOne({ email });
     if (existingUser) {
       console.log('Email уже используется:', email);
-      return res.status(400).json({ error: 'Email уже используется' });
+
+      if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+        return res.status(400).json({ errors: { email: 'Email уже используется' } });
+      } else {
+        return res.status(400).render('pug/users/register', {
+          title: 'Регистрация',
+          errors: { email: 'Email уже используется' },
+          values: { name, email }
+        });
+      }
     }
 
     console.log('Создание нового пользователя');
-    const hashedPassword = await bcrypt.hash(password, 12); // Изменено: добавлено хэширование пароля
-    const user = new AuthUser({ name, email, password: hashedPassword }); // Изменено: сохранение хэшированного пароля
+    // Хешируем пароль перед сохранением
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const user = new AuthUser({
+      name,
+      email,
+      password: hashedPassword
+    });
+
+    // Создаем токен после сохранения
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+
+    // Сохраняем токен в поле пользователя
+    user.token = token;
     await user.save();
 
     console.log('Пользователь успешно сохранен:', user);
 
-    if (!JWT_SECRET) {
-      console.error('JWT_SECRET не определён');
-      return res.status(500).json({ error: 'Ошибка сервера: JWT_SECRET отсутствует' });
-    }
+    // Устанавливаем cookie
+    res.cookie('token', token, { httpOnly: true });
 
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-    res.cookie('token', token, { httpOnly: true }); // Изменено: убрано secure: true для локальной разработки
-    res.redirect('/');
-  } catch (err) {
-    if (err.code === 11000) {
-      console.error('Ошибка дублирования:', err.keyValue);
-      return res.status(400).json({ error: `Поле ${Object.keys(err.keyValue)[0]} уже используется` });
+    // Возвращаем JSON при API запросе или redirect при обычном запросе
+    if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+      res.status(201).json({ success: true, token, redirectUrl: '/' });
+    } else {
+      res.redirect('/');
     }
+  } catch (err) {
+    // Обработка ошибок
     console.error('Ошибка при регистрации:', err);
-    res.status(500).json({ error: 'Ошибка сервера' });
+    if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+      res.status(500).json({ errors: { server: 'Ошибка сервера' } });
+    } else {
+      res.status(500).render('pug/users/register', {
+        title: 'Регистрация',
+        errors: { server: 'Ошибка сервера' },
+        values: { name, email }
+      });
+    }
   }
 });
 
@@ -52,49 +107,98 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
+    // Базовая валидация
+    const errors = {};
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = 'Введите корректный email адрес';
+    }
+
+    if (!password) {
+      errors.password = 'Введите пароль';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+        return res.status(400).json({ errors });
+      } else {
+        return res.status(400).render('pug/users/login', {
+          title: 'Вход',
+          errors,
+          values: { email }
+        });
+      }
+    }
+
     const user = await AuthUser.findOne({ email });
-    if (!user) return res.status(400).json({ error: 'Неверный email или пароль' });
+    if (!user) {
+      if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+        return res.status(400).json({ errors: { credentials: 'Неверный email или пароль' } });
+      } else {
+        return res.status(400).render('pug/users/login', {
+          title: 'Вход',
+          errors: { credentials: 'Неверный email или пароль' },
+          values: { email }
+        });
+      }
+    }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) return res.status(400).json({ error: 'Неверный email или пароль' });
+    if (!isPasswordValid) {
+      if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+        return res.status(400).json({ errors: { credentials: 'Неверный email или пароль' } });
+      } else {
+        return res.status(400).render('pug/users/login', {
+          title: 'Вход',
+          errors: { credentials: 'Неверный email или пароль' },
+          values: { email }
+        });
+      }
+    }
 
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-    res.cookie('token', token, { httpOnly: true }); // Убрано secure: true для локальной разработки
-    res.status(201).json({ message: 'Вход выполнен!', redirectUrl: '/' });
+
+    // Сохраняем токен в БД
+    user.token = token;
+    await user.save();
+
+    // Устанавливаем cookie
+    res.cookie('token', token, { httpOnly: true });
+
+    if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+      res.status(200).json({ success: true, token, redirectUrl: '/' });
+    } else {
+      res.redirect('/');
+    }
   } catch (err) {
     console.error('Ошибка при входе:', err);
-    res.status(500).json({ error: 'Ошибка сервера' });
+    if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+      res.status(500).json({ errors: { server: 'Ошибка сервера' } });
+    } else {
+      res.status(500).render('pug/users/login', {
+        title: 'Вход',
+        errors: { server: 'Ошибка сервера' },
+        values: { email }
+      });
+    }
   }
 });
 
 // Выход
+router.get('/logout', (req, res) => {
+  res.clearCookie('token', { httpOnly: true });
+  res.redirect('/auth/login');
+});
+
 router.post('/logout', (req, res) => {
   res.clearCookie('token', { httpOnly: true, secure: true });
   res.status(200).json({ message: 'Выход выполнен' });
 });
 
-router.get('/logout', (req, res) => {
-  res.clearCookie('token', { httpOnly: true });
-  req.session.destroy(err => {
-    if (err) {
-      return res.status(500).send('Ошибка выхода');
-    }
-    res.redirect('/auth/login');
-  });
-});
-
-// Показать страницу входа
-router.get('/login', (req, res) => {
-  res.render('pug/users/login', { title: 'Вход' });
-});
-
-// Показать страницу регистрации
-router.get('/register', (req, res) => {
-  res.render('pug/users/register', { title: 'Регистрация' });
-});
-
-router.get('/register', renderRegisterPage);
+// Показать страницу входа - используем функцию из контроллера
 router.get('/login', renderLoginPage);
-router.get('/logout', logout);
+
+// Показать страницу регистрации - используем функцию из контроллера
+router.get('/register', renderRegisterPage);
 
 export default router;
