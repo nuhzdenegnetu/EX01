@@ -5,21 +5,22 @@ import { checkAuth } from '../middlewares/auth.middleware.mjs';
 
 const router = Router();
 
-// Маршруты для создания документов
+// Маршруты для CRUD операций с моделями
+router.post('/:modelName', crudController.insertOne); // Создание документа
+router.get('/:modelName', crudController.find); // Получение документов
+router.put('/:modelName', crudController.updateOne); // Обновление документа
+router.delete('/:modelName', crudController.deleteOne); // Удаление документа
+
+// Оставляем старые маршруты для обратной совместимости
 router.post('/:modelName/insertOne', crudController.insertOne);
 router.post('/:modelName/insertMany', crudController.insertMany);
-
-// Маршруты для обновления документов
 router.put('/:modelName/updateOne', crudController.updateOne);
 router.put('/:modelName/updateMany', crudController.updateMany);
 router.put('/:modelName/replaceOne', crudController.replaceOne);
-
-// Маршруты для удаления документов
 router.delete('/:modelName/deleteOne', crudController.deleteOne);
 router.delete('/:modelName/deleteMany', crudController.deleteMany);
-
-// Маршрут для расширенного чтения
 router.post('/:modelName/find', crudController.find);
+
 // Маршрут для получения всех доступных моделей
 router.get('/models', crudController.getAvailableModels);
 router.post('/register', crudController.register);

@@ -1,0 +1,42 @@
+<h1>Список статей</h1>
+<div class="articles-list">
+    <% if (articles.length === 0) { %>
+        <p>Статьи не найдены</p>
+    <% } else { %>
+        <% articles.forEach(article => { %>
+            <div class="article-card">
+                <h2 class="article-title">
+                    <a href="/articles/<%= article.id %>"><%= article.title %></a>
+                </h2>
+                <p class="article-author">Автор: <%= article.author %></p>
+                <p class="article-date">
+                    <%= new Date(article.publishedAt).toLocaleDateString('ru-RU', {day: 'numeric', month: 'long', year: 'numeric'}) %>
+                </p>
+                <p class="article-summary"><%= article.summary %></p>
+            </div>
+        <% }) %>
+    <% } %>
+</div>
+
+<!-- Пагинация -->
+<div class="pagination">
+    <% if (pagination.page > 1) { %>
+        <a href="/articles/paginated?page=1&limit=<%= pagination.limit %>" class="pagination-link">Первая</a>
+        <a href="/articles/paginated?page=<%= pagination.page - 1 %>&limit=<%= pagination.limit %>" class="pagination-link">Предыдущая</a>
+    <% } %>
+
+    <% let startPage = Math.max(1, pagination.page - 2); %>
+    <% let endPage = Math.min(pagination.totalPages, pagination.page + 2); %>
+
+    <% for (let i = startPage; i <= endPage; i++) { %>
+        <a href="/articles/paginated?page=<%= i %>&limit=<%= pagination.limit %>"
+           class="pagination-link <%= i === pagination.page ? 'active' : '' %>">
+           <%= i %>
+        </a>
+    <% } %>
+
+    <% if (pagination.page < pagination.totalPages) { %>
+        <a href="/articles/paginated?page=<%= pagination.page + 1 %>&limit=<%= pagination.limit %>" class="pagination-link">Следующая</a>
+        <a href="/articles/paginated?page=<%= pagination.totalPages %>&limit=<%= pagination.limit %>" class="pagination-link">Последняя</a>
+    <% } %>
+</div>

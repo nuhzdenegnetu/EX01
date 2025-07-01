@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title || 'Express App' %></title>
+<title>Express App с шаблонизаторами</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="icon" href="/favicon.svg">
 </head>
@@ -12,13 +12,20 @@
         <a class="page__nav-link" href="/">Главная</a>
         <a class="page__nav-link" href="/users">Пользователи</a>
         <a class="page__nav-link" href="/articles">Статьи</a>
-        <a class="page__nav-link" href="/auth/register">Авторизация</a>
+        <a class="page__nav-link" href="/articles/paginated">Пагинация статей</a>
+        <a class="page__nav-link" href="/articles/stats">Статистика статей</a>
+        <% if (isAuthenticated) { %>
+            <a class="page__nav-link" href="/auth/logout">Выход</a>
+        <% } else { %>
+            <a class="page__nav-link" href="/auth/login">Вход</a>
+            <a class="page__nav-link" href="/auth/register">Регистрация</a>
+        <% } %>
         <div class="theme-switcher">
-            <input id="theme-toggle" class="theme-switcher__toggle"
-                   type="checkbox" <%= theme === 'dark' ? 'checked' : '' %>>
+            <input id="theme-toggle" class="theme-switcher__toggle" type="checkbox">
             <label class="theme-switcher__label" for="theme-toggle">Тема</label>
         </div>
     </nav>
+    <script src="/js/theme.js"></script>
 </header>
 <main class="page__content">
     <%- body %>
@@ -26,6 +33,5 @@
 <footer class="page__footer">
     <p class="page__footer-text">© 2025 Express App с шаблонизаторами</p>
 </footer>
-<script src="/js/theme.js"></script>
 </body>
 </html>

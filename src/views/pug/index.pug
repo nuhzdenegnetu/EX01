@@ -1,7 +1,12 @@
 extends layout
 
 block content
-    h2.page__section-title Добро пожаловать в Express приложение
+    section.dashboard
+        div.dashboard__welcome
+            if isAuthenticated && user
+                h2.page__section-title Привет, #{user.name}!
+            else
+                h2.page__section-title Добро пожаловать в Express приложение
 
     section.dashboard
         div.dashboard__welcome

@@ -3,9 +3,21 @@
     <div class="article__meta">
         <p class="article__author"><strong>Автор:</strong> <%= article.author %></p>
         <p class="article__date"><strong>Опубликовано:</strong> <%= article.publishedDate %></p>
+        <p class="article__stats">
+            <span class="article__reading-time"><strong>Время чтения:</strong> <%= article.readingTime %></span>
+            <span class="article__views"><strong>Просмотров:</strong> <%= article.viewCount %></span>
+        </p>
+        <% if (article.tags && article.tags.length > 0) { %>
+            <div class="article__tags">
+                <strong>Теги:</strong>
+                <% article.tags.forEach(function(tag) { %>
+                    <span class="article__tag"><%= tag %></span>
+                <% }); %>
+            </div>
+        <% } %>
     </div>
     <div class="article__content">
-        <p><%= article.content %></p>
+        <%- article.content.replace(/\n/g, '<br>') %>
     </div>
     <div class="article__actions">
         <a class="btn btn--primary article__back-link" href="/articles">Вернуться к списку статей</a>

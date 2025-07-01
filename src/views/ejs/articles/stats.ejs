@@ -1,0 +1,47 @@
+<h1>Статистика статей</h1>
+<section class="stats-section">
+    <h2>Общая статистика</h2>
+    <div class="stats-card">
+        <p><strong>Всего статей:</strong> <%= generalStats.totalArticles || 0 %></p>
+        <p><strong>Общее количество просмотров:</strong> <%= generalStats.totalViews || 0 %></p>
+        <p><strong>Среднее количество просмотров:</strong> <%= generalStats.averageViews || 0 %></p>
+        <p><strong>Максимальное количество просмотров:</strong> <%= generalStats.mostViewedArticle || 0 %></p>
+        <p><strong>Количество категорий:</strong> <%= generalStats.categoriesCount || 0 %></p>
+        <p><strong>Среднее время чтения:</strong> <%= generalStats.avgReadingTime || 0 %> мин</p>
+    </div>
+</section>
+
+<section class="stats-section">
+    <h2>Статистика по категориям</h2>
+    <table class="stats-table">
+        <thead>
+        <tr>
+            <th>Категория</th>
+            <th>Количество статей</th>
+            <th>Общие просмотры</th>
+            <th>Средние просмотры</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% categoryStats.forEach(cat => { %>
+            <tr>
+                <td><%= cat.category %></td>
+                <td><%= cat.count %></td>
+                <td><%= cat.totalViews %></td>
+                <td><%= cat.avgViews %></td>
+            </tr>
+        <% }) %>
+        </tbody>
+    </table>
+</section>
+
+<section class="stats-section">
+    <h2>Популярные теги</h2>
+    <div class="tag-cloud">
+        <% tagStats.forEach(tag => { %>
+            <span class="tag" style="font-size: <%= 0.8 + (tag.count * 0.2) %>em">
+                <%= tag.tag %> (<%= tag.count %>)
+            </span>
+        <% }) %>
+    </div>
+</section>
