@@ -3,11 +3,14 @@ import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose'; // Добавляем импорт
 import dotenv from 'dotenv';
 dotenv.config();
+// Примерный код в app.js или config.js
+dotenv.config();
+
 const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) {
-    console.error('JWT_SECRET не определён. Проверьте файл .env');
-    process.exit(1); // Завершение приложения, если секрет отсутствует
+  console.error('JWT_SECRET не определён. Проверьте файл .env');
+  process.exit(1);
 }
 
 export const isAuthenticated = (req, res, next) => {
