@@ -2,9 +2,154 @@ extends ../layout
 
 block content
     h1.page__section-title Профиль пользователя
+
     if user
         div.user__profile
-            p.user__name Имя: #{user.name}
-            p.user__email Email: #{user.email}
+            div.user__header
+                h2.user__name= user.name
+                p.user__email= user.email
+
+            div.user__info
+                p.user__id ID пользователя: #{user.userId}
+
+            if isAuthenticated
+                div.user__actions
+                    button.btn.btn--secondary#editProfileBtn Редактировать профиль
+                    button.btn.btn--danger#deleteProfileBtn Удалить аккаунт
+
+            // Форма редактирования профиля (скрыта по умолчанию)
+            div.user__edit-form.hidden#editProfileForm
+                h3.form__title Редактировать профиль
+                form.form__profile(action=`/users/${user.userId}` method="PUT")
+                    div.form__group
+                        label.form__label(for="name") Имя:
+                        input.form__input#name(type="text" name="name" value=user.name required)
+
+                    div.form__group
+                        label.form__label(for="email") Email:
+                        input.form__input#email(type="email" name="email" value=user.email required)
+
+                    div.form__group
+                        label.form__label(for="password") Новый пароль:
+                        input.form__input#password(type="password" name="password" placeholder="Оставьте пустым, если не хотите менять")
+
+                    div.form__group.form__buttons
+                        button.btn.btn--primary(type="submit") Сохранить
+                        button.btn.btn--secondary#cancelEditBtn(type="button") Отмена
+
+            // Диалоговое окно подтверждения удаления (скрыто по умолчанию)
+            div.user__delete-confirm.hidden#deleteConfirmDialog
+                h3.dialog__title Подтвердите удаление
+                p.dialog__message Вы действительно хотите удалить свой аккаунт? Это действие невозможно отменить.
+                div.dialog__buttons
+                    button.btn.btn--danger#confirmDeleteBtn Удалить
+                    button.btn.btn--secondary#cancelDeleteBtn Отмена
     else
         p.error Пользователь не найден
+
+    // Скрипт для интерактивности
+    script.
+        document.addEventListener('DOMContentLoaded', function () {
+            // Кнопки и формы
+            const editBtn = document.getElementById('editProfileBtn');
+            const deleteBtn = document.getElementById('deleteProfileBtn');
+            const editForm = document.getElementById('editProfileForm');
+            const deleteDialog = document.getElementById('deleteConfirmDialog');
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+            // Показать форму редактирования
+            if (editBtn) {
+                editBtn.addEventListener('click', function () {
+                    editForm.classList.remove('hidden');
+                });
+            }
+
+            // Скрыть форму редактирования
+            if (cancelEditBtn) {
+                cancelEditBtn.addEventListener('click', function () {
+                    editForm.classList.add('hidden');
+                });
+            }
+
+            // Показать диалог подтверждения удаления
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', function () {
+                    deleteDialog.classList.remove('hidden');
+                });
+            }
+
+            // Скрыть диалог подтверждения
+            if (cancelDeleteBtn) {
+                cancelDeleteBtn.addEventListener('click', function () {
+                    deleteDialog.classList.add('hidden');
+                });
+            }
+
+            // Обработка отправки формы редактирования
+            const profileForm = document.querySelector('.form__profile');
+            if (profileForm) {
+                profileForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    const userId = this.action.split('/').pop();
+                    const formData = new FormData(this);
+                    const data = {};
+
+                    for (const [key, value] of formData.entries()) {
+                        if (value.trim() !== '') {
+                            data[key] = value;
+                        }
+                    }
+
+                    // Отправка через fetch API
+                    fetch(`/users/${userId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message) {
+                                alert('Профиль успешно обновлен');
+                                location.reload();
+                            } else {
+                                alert('Ошибка при обновлении профиля');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Ошибка:', error);
+                            alert('Произошла ошибка при обновлении профиля');
+                        });
+                });
+            }
+
+            // Обработка подтверждения удаления
+            if (confirmDeleteBtn) {
+                confirmDeleteBtn.addEventListener('click', function () {
+                    const userId = window.location.pathname.split('/').pop();
+
+                    fetch(`/users/${userId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message) {
+                                alert('Аккаунт успешно удален');
+                                window.location.href = '/users';
+                            } else {
+                                alert('Ошибка при удалении аккаунта');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Ошибка:', error);
+                            alert('Произошла ошибка при удалении аккаунта');
+                        });
+                });
+            }
+        });

@@ -388,3 +388,103 @@ body {
     background-color: #1e1e1e;
     color: #ffffff;
 }
+
+
+/* Стиль для скрытых элементов */
+.hidden {
+    display: none;
+}
+
+/* Стили для профиля пользователя */
+.user__profile {
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.user__profile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.user__profile-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.user__profile-field {
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 0.5rem;
+}
+
+.user__profile-label {
+    font-weight: 600;
+    color: #666;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.user__profile-value {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+/* Стили для групп форм */
+.form__group {
+    margin-bottom: 1.25rem;
+}
+
+.form__group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form__group input,
+.form__group textarea,
+.form__group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form__group input:focus,
+.form__group textarea:focus,
+.form__group select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Адаптация для темной темы */
+.page--dark .user__profile {
+    background-color: #2a2a2a;
+}
+
+.page--dark .user__profile-label {
+    color: #aaa;
+}
+
+.page--dark .user__profile-value {
+    color: #eee;
+}
+
+.page--dark .user__profile-field {
+    border-bottom-color: #444;
+}
+
+.page--dark .form__group input,
+.page--dark .form__group textarea,
+.page--dark .form__group select {
+    background-color: #333;
+    border-color: #555;
+    color: #fff;
+}

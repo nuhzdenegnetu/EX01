@@ -115,7 +115,15 @@ export const deleteUser = async (req, res) => {
     try {
         const { userId } = req.params;
 
-        const result = await AuthUser.findByIdAndDelete(userId);
+        // Проверяем, является ли userId числом (для FakeUser) или ObjectId (для AuthUser)
+        let result;
+        if (/^\d+$/.test(userId)) {
+            // Если userId - число, ищем в FakeUser
+            result = await FakeUser.findOneAndDelete({ userId: Number(userId) });
+        } else {
+            // Иначе считаем, что это ObjectId для AuthUser
+            result = await AuthUser.findByIdAndDelete(userId);
+        }
 
         if (!result) {
             return res.status(404).json({ message: 'Пользователь не найден' });
